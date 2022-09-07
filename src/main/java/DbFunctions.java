@@ -11,18 +11,6 @@ import java.util.Properties;
 
 public class DbFunctions {
 
-//    public static void main(String[] args) {
-//        try {
-//            Class.forName("org.postgresql.Driver");
-//            //try (Connection connection = getConnection()) {
-//                System.out.println("Connection to PostgreSQL DB successful!");
-//            //}
-//        } catch (Exception ex) {
-//            System.out.println("Connection failed...");
-//            System.out.println(ex);
-//        }
-//    }
-
     public static Connection getConnection() throws SQLException, IOException {
 
         Properties props = new Properties();
@@ -38,49 +26,14 @@ public class DbFunctions {
         return DriverManager.getConnection(url, username, password);
     }
 
-    public void shouldSelectUsers() throws SQLException, IOException {
-        Connection connection = DbFunctions.getConnection();
-        Statement statement = connection.createStatement();
-        ResultSet resultSet = statement.executeQuery("SELECT * FROM users");
-        while (resultSet.next()) {
-            System.out.println(resultSet.getString(2));
-        }
-    }
-
-    public void selectAllInfoOfUsers() throws SQLException, IOException {
-        Connection connection = DbFunctions.getConnection();
-        Statement statement = connection.createStatement();
-        ResultSet rs = statement.executeQuery("SELECT * FROM USERS");
-
-        while (rs.next()) {
-            int id = rs.getInt("ID");
-            String firstName = rs.getString("FIRST_NAME");
-            String lastName = rs.getString("LAST_NAME");
-            String patronymic = rs.getString("PATRONYMIC");
-            String birthday = rs.getString("BIRTHDAY");
-            String email = rs.getString("EMAIL");
-            String phone = rs.getString("PHONE");
-
-            System.out.printf("%d, %s, %s, %s, %s, %s, %s \n", id, firstName, lastName, patronymic, birthday, email,
-                    phone);
-        }
-    }
-
     public void createUser() throws SQLException, IOException {
         Connection connection = DbFunctions.getConnection();
         Statement statement = connection.createStatement();
         String sqlCommandCreateUser = "INSERT INTO USERS (ID, FIRST_NAME, LAST_NAME, PATRONYMIC, BIRTHDAY, " +
                 "EMAIL, PHONE)\n" +
-                "     VALUES (911, 'Korben', 'Dallas', 'Testing', '1955-03-19', 'korben@yahoo.net', '+000000000911');";
+                "     VALUES (NEXTVAL('USERS_SEC'), 'Korben', 'Dallas', 'Testing', '1955-03-19', 'korben@yahoo.net', '+000000000911');";
 
         statement.executeUpdate(sqlCommandCreateUser);
-    }
-
-    public void deleteUser() throws SQLException, IOException {
-        Connection connection = DbFunctions.getConnection();
-        Statement statement = connection.createStatement();
-        String sqlCommandDeleteUser = "DELETE FROM USERS WHERE FIRST_NAME='Кавай'";
-        statement.executeUpdate(sqlCommandDeleteUser);
     }
 
     public void createLoginAndPassword() throws SQLException, IOException {
@@ -124,5 +77,40 @@ public class DbFunctions {
                 " '2030-06-29', 'Кавай', 'Testing', 'Леонард', 'РОВД г. Минска', 'Лос-Анджелес', true, 5);";
 
         statement.executeUpdate(sqlCommandCreatePersonaldata);
+    }
+
+    public void deleteUser() throws SQLException, IOException {
+        Connection connection = DbFunctions.getConnection();
+        Statement statement = connection.createStatement();
+        String sqlCommandDeleteUser = "DELETE FROM USERS WHERE FIRST_NAME='Кавай'";
+        statement.executeUpdate(sqlCommandDeleteUser);
+    }
+
+    public void shouldSelectUsers() throws SQLException, IOException {
+        Connection connection = DbFunctions.getConnection();
+        Statement statement = connection.createStatement();
+        ResultSet resultSet = statement.executeQuery("SELECT * FROM users");
+        while (resultSet.next()) {
+            System.out.println(resultSet.getString(2));
+        }
+    }
+
+    public void selectAllInfoOfUsers() throws SQLException, IOException {
+        Connection connection = DbFunctions.getConnection();
+        Statement statement = connection.createStatement();
+        ResultSet rs = statement.executeQuery("SELECT * FROM USERS");
+
+        while (rs.next()) {
+            int id = rs.getInt("ID");
+            String firstName = rs.getString("FIRST_NAME");
+            String lastName = rs.getString("LAST_NAME");
+            String patronymic = rs.getString("PATRONYMIC");
+            String birthday = rs.getString("BIRTHDAY");
+            String email = rs.getString("EMAIL");
+            String phone = rs.getString("PHONE");
+
+            System.out.printf("%d, %s, %s, %s, %s, %s, %s \n", id, firstName, lastName, patronymic, birthday, email,
+                    phone);
+        }
     }
 }
